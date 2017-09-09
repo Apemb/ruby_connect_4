@@ -1,4 +1,3 @@
-require_relative('../app/slot')
 
 class NoAvailableSlotError < StandardError
 end
@@ -7,9 +6,12 @@ class ColumnNotExistingError < StandardError
 end
 
 class Grid
+
+  NUMBER_OF_COLUMN = 7
+
   def initialize
     @is_empty = true
-    @slot_counter = 0
+    @slot_counters = Array.new(7, 0)
   end
 
   def is_empty
@@ -17,22 +19,23 @@ class Grid
   end
 
   def fill column_index
-    @slot_counter = @slot_counter + 1
-    if @slot_counter > 6
-      raise NoAvailableSlotError.new
-    elsif column_index > 6 || column_index < -0
+    if column_index + 1 > NUMBER_OF_COLUMN || column_index < 0
       raise ColumnNotExistingError.new
+    end
+
+    @slot_counters[column_index] += 1
+    if @slot_counters[column_index] + 1 > NUMBER_OF_COLUMN
+      raise NoAvailableSlotError.new
     else
       @is_empty = false
     end
   end
 
-  def get_slot column_index, row_index
-    slot = Slot.new
-    if column_index == 3 && (@slot_counter == 2 || row_index == 0)
-      slot.fill
+  def get_disc_color column_index, row_index
+
+    if @slot_counters[column_index] > row_index
+      true
     end
-    slot
   end
 end
 

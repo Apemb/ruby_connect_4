@@ -42,7 +42,7 @@ describe Grid do
       end
     end
 
-    context 'grid has a point in column, and adds a new point in that column' do
+    context 'grid has a point in third column, and adds a new point in that column' do
       it 'has a not empty slot in second position of column' do
         #Arrange
         grid = Grid.new
@@ -52,7 +52,45 @@ describe Grid do
         grid.fill 3
 
         #Assert
-        expect(grid.get_slot(3, 1).is_empty).to be_falsey
+        expect(grid.get_disc_color(3, 1)).not_to be_nil
+      end
+    end
+
+    context 'grid has a point in fourth column, and adds a new point in that column' do
+
+      let(:grid) { Grid.new }
+
+      before do
+        #Arrange
+        grid.fill 4
+
+        #Act
+        grid.fill 4
+      end
+
+      #Assert
+      it 'has a not empty slot in second position of column' do
+        expect(grid.get_disc_color(4, 1)).not_to be_nil
+      end
+      it 'has an empty slot in second position of another column' do
+        expect(grid.get_disc_color(3, 1)).to be_nil
+      end
+      it 'has an empty slot in third position of that column' do
+        expect(grid.get_disc_color(4, 2)).to be_nil
+      end
+    end
+
+    context 'grid has a point in fifth column, and adds a new point in that column' do
+      it 'has a not empty slot in second position of column' do
+        #Arrange
+        grid = Grid.new
+        grid.fill 5
+
+        #Act
+        grid.fill 5
+
+        #Assert
+        expect(grid.get_disc_color(5, 1)).not_to be_nil
       end
     end
 
@@ -69,15 +107,15 @@ describe Grid do
 
       #Assert
       it 'has an empty slot in second position of that column' do
-        expect(grid.get_slot(3, 1).is_empty).to be_truthy
+        expect(grid.get_disc_color(3, 1)).to be_nil
       end
 
       it 'has an filled slot in first position of that column' do
-        expect(grid.get_slot(3, 0).is_empty).to be_falsey
+        expect(grid.get_disc_color(3, 0)).not_to be_nil
       end
 
       it 'has an empty slot in first position of other column' do
-        expect(grid.get_slot(2, 0).is_empty).to be_truthy
+        expect(grid.get_disc_color(2, 0)).to be_nil
       end
     end
 
@@ -96,7 +134,16 @@ describe Grid do
       it 'throws an NoAvailableSlot error when addind a 7th point in that column' do
         expect { grid.fill 3}.to raise_error(NoAvailableSlotError)
       end
+
+      it 'does not throw an error when adding a new point in another column' do
+        expect { grid.fill 4}.not_to raise_error
+      end
+
+      it 'does not throw an error when adding a new point in another column' do
+        expect { grid.fill 5}.not_to raise_error
+      end
     end
+
 
     context 'grid is empty' do
 
